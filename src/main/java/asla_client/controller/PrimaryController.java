@@ -3,6 +3,7 @@ package asla_client.controller;
 
 import asla_client.AppConstants;
 import asla_client.HTTPController;
+import asla_client.models.JsonTestClass;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 public class PrimaryController implements Initializable {
@@ -42,11 +44,25 @@ public class PrimaryController implements Initializable {
         System.out.println(numberTwo);
 
 
-        //  httpController.sendGet(numberOne,numberTwo);
+        httpController.sendGet("5", "12");
+        httpController.sendGetJSON();
+
+        String s = "O Hi this a test Car River Deer Car Bear and";
+        String json = new StringBuilder()
+                .append("{")
+                .append(MessageFormat.format("\"data\": \"{0}\"", s))
+                .append("}").toString();
 
 
+        httpController.postRequest(json);
+
+        JsonTestClass test = httpController.sendGetJSONParse(JsonTestClass.class);
+
+        System.out.println(test.toString());
+
+/*
         //Run a separate thread for request and response.
-        new Thread(new Runnable() {
+        new Thread(new Runnable() {q
             @Override
             public void run() {
 
@@ -59,6 +75,8 @@ public class PrimaryController implements Initializable {
                 });
             }
         }).start();
+
+ */
 
 
     }
