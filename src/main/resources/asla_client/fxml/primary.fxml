@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane fx:id="mainContent" prefHeight="720.0" prefWidth="1024.0" stylesheets="@../basicStyleSheet.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.PrimaryController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Close" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Delete" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+   </top>
+   <padding>
+      <Insets bottom="5.0" />
+   </padding>
+   <right>
+      <Region prefHeight="690.0" prefWidth="15.0" style="-fx-background-color: #73bcff;" BorderPane.alignment="CENTER" />
+   </right>
+   <left>
+      <Region prefHeight="676.0" prefWidth="18.0" style="-fx-background-color: #73bcff;" BorderPane.alignment="CENTER" />
+   </left>
+   <bottom>
+      <HBox prefHeight="7.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+         <children>
+            <Region prefHeight="17.0" prefWidth="40.0" HBox.hgrow="ALWAYS" />
+            <Label prefHeight="17.0" prefWidth="191.0" text="System Language: English" />
+            <Region prefHeight="17.0" prefWidth="551.0" style="-fx-background-color: #73bcff;" />
+            <Label prefHeight="17.0" prefWidth="212.0" text="Copyright © 2019, ALSA-Tech Systems" />
+            <Region prefHeight="17.0" prefWidth="40.0" HBox.hgrow="NEVER" />
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <Pane prefHeight="673.0" prefWidth="990.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
