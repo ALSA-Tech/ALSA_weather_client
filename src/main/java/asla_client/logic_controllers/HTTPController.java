@@ -1,4 +1,4 @@
-package asla_client;
+package asla_client.logic_controllers;
 
 import asla_client.models.JsonTestClass;
 import com.google.gson.Gson;
@@ -11,9 +11,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.*;
 import java.time.Duration;
 
-/**
- * @author Sebastian Norén <s.norén@gmail.com>
- */
+
 public class HTTPController {
     private final HttpClient client;
     private final Gson gson;
@@ -73,7 +71,7 @@ public class HTTPController {
 
 
     public String postRequest(String stringJSON){
-        String uri = "https://seb-noren-cloud.herokuapp.com/getWordLengthFrequency";
+        String uri = "http://localhost:8080/api/client";
         HttpResponse<String> response = null;
 
         try {

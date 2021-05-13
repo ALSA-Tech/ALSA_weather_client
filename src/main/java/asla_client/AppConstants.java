@@ -4,8 +4,6 @@ public class AppConstants {
 
     public static AppConstants instance = null;
 
-
-
     public static AppConstants getInstance() {
         if (instance == null) {
             instance = new AppConstants();
@@ -16,6 +14,7 @@ public class AppConstants {
     public AppConstants() {
         System.out.println("AppConstant Runs");
     }
+
 }
 
 

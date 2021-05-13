@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.PasswordField?>
+<Pane fx:id="mainContent" prefHeight="673.0" prefWidth="990.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.RegistrationController">
+   <children>
+      <VBox layoutX="386.0" layoutY="222.0" prefHeight="96.0" prefWidth="217.0" spacing="15.0">
+         <children>
+            <TextField fx:id="textInputUsername" promptText="Username" />
+            <TextField fx:id="textInputEmail" layoutX="15.0" layoutY="15.0" promptText="Email" />
+            <PasswordField fx:id="textInputPassword" promptText="Password" />
+            <PasswordField fx:id="textInputPasswordCtrl" promptText="Verify password" />
+            <Label fx:id="errorText" prefHeight="15.0" prefWidth="299.0" text="Label" textFill="#d80707" VBox.vgrow="NEVER">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="25.0" prefWidth="211.0" spacing="5.0">
+               <children>
+                  <Button fx:id="createAccBtn" onAction="#createAccBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Create Account" />
+                  <Button fx:id="cancelBtn" onAction="#cancelBtn" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Cancel" />
+               </children>
+               <VBox.margin>
+                  <Insets left="5.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+   </children>
+</Pane>

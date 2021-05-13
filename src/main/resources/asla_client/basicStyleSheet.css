@@ -15,7 +15,8 @@
  }
 
  .button:hover {
-     -fx-effect: innershadow(gaussian, d7d7d7, 5, 0, 0, 0);
+     -fx-background-color:
+             linear-gradient(#aeacac, #bebdbd);
  }
 
  .button:pressed {
