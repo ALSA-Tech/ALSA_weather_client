@@ -1,4 +1,4 @@
-module OOPThesis {
+module ASLA_weather_client {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;

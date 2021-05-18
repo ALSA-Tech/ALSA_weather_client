@@ -7,22 +7,23 @@ import java.util.UUID;
  * @author Sebastian Norén <s.norén@gmail.com>
  */
 public class Client {
-    private UUID id;
+    private int id; // string id  instead?
     private String name;
     private String password;
     private String email;
-    private ArrayList<String> locationSubscriptions;
 
-    public Client(UUID id, String name, String password, String email, ArrayList<String> locationSubscriptions) {
+    public Client (){
+    }
+
+    public Client(int id, String name, String password, String email) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
-        this.locationSubscriptions = locationSubscriptions;
     }
 
 
-    public UUID getId() {
+    public int getId() {
         return this.id;
     }
 
@@ -38,7 +39,4 @@ public class Client {
         return email;
     }
 
-    public ArrayList<String> getLocationSubscriptions() {
-        return this.locationSubscriptions;
-    }
 }

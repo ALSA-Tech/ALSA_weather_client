@@ -1,4 +1,4 @@
-package asla_client.logic_controllers;
+package asla_client.utils;
 
 import java.text.MessageFormat;
 import java.util.regex.Pattern;

@@ -1,12 +1,18 @@
 package asla_client.controller;
 
-import asla_client.logic_controllers.HTTPController;
-import asla_client.logic_controllers.InputController;
-import asla_client.logic_controllers.ScorpioZHash;
-import asla_client.logic_controllers.StringResource;
+import asla_client.AppConstants;
+import asla_client.models.Client;
+import asla_client.utils.HTTPController;
+import asla_client.utils.InputController;
+import asla_client.utils.ScorpioZHash;
+import asla_client.utils.StringResource;
+import com.google.gson.Gson;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -28,10 +34,7 @@ public class LoginController implements Initializable {
     private PasswordField textInputPassword;
 
 
-    private final HTTPController httpController = new HTTPController();
     private final InputController inputController = new InputController();
-
-    private static final String savedPassword = "65536:U02HkLVPRqQNru5Xfnk5Hw==:wvVaFTZWu/QNNxjHznRkVye+AVv/NgB8Tugf+obUtk0+Tk7QCqdGGFaS51cdQCAk6P+GrQrsADh+VfKx1NDIIg==";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -40,58 +43,48 @@ public class LoginController implements Initializable {
 
 
     public void login() {
-        ScorpioZHash scorpioZHash = new ScorpioZHash();
 
         String userName = textInputUsername.getText().trim();
         String passWord = textInputPassword.getText().trim();
 
         if (inputController.CheckInputsIsValid(userName, passWord)) {
-            // TODO Send to server
-            if (scorpioZHash.validatePassword(passWord, savedPassword)) {
-                System.out.println("Login");
-                loadScene("user_pane.fxml");
-            } else {
-                System.out.println("Password does not match");
-            }
+            sendLoginRequest(userName, passWord);
+
         } else {
             System.out.println("Input missing");
         }
 
+    }
 
-        //  loadScene("/asla_client/fxml/second_pane.fxml");
-        /*
-        httpController.sendGet("5", "12");
-        httpController.sendGetJSON();
-
-        String s = "O Hi this a test Car River Deer Car Bear and";
-        String json = new StringBuilder()
-                .append("{")
-                .append(MessageFormat.format("\"data\": \"{0}\"", s))
-                .append("}").toString();
-
-
-        httpController.postRequest(json);
-
-        JsonTestClass test = httpController.sendGetJSONParse(JsonTestClass.class);
-
-        System.out.println(test.toString());
-
-
-        //Run a separate thread for request and response.
+    private void sendLoginRequest(String userName, String password) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
-
                 // DO a request here
+                Client loginClient = new Client(-1, userName, password, null);
+                String lol = AppConstants.getInstance().getHttpController().postRequest(loginClient, "login");
+                Client client = new Gson().fromJson(lol, Client.class);;
 
-                //Update GUI thread:
-                Platform.runLater(() -> {
-                    //   textArea.setText(cx);
-                });
+                if (client != null) {
+                    System.out.println("Login");
+                    //Update GUI thread:
+                    Platform.runLater(() -> {
+                        //   textArea.setText(cx);
+                        loadScene("user_pane.fxml");
+                    });
+
+                } else {
+                    Platform.runLater(()-> {
+                        Alert alert = new Alert(Alert.AlertType.NONE);
+                        alert.setTitle("Failed Login");
+                        alert.setContentText("Login Failed!");
+                        alert.getButtonTypes().add(ButtonType.OK);
+                        alert.show();
+                    });
+                }
+
             }
         }).start();
- */
     }
 
     private void loadScene(String fxml) {

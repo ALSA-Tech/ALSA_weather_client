@@ -2,15 +2,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import javafx.scene.control.PasswordField?>
-<Pane fx:id="mainContent" prefHeight="673.0" prefWidth="990.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.LoginController">
+<Pane fx:id="mainContent" prefHeight="552.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.LoginController">
    <children>
-      <VBox alignment="CENTER" layoutX="385.0" layoutY="283.0" prefHeight="96.0" prefWidth="220.0" spacing="15.0">
+      <VBox alignment="CENTER" layoutX="273.0" layoutY="222.0" prefHeight="96.0" prefWidth="220.0" spacing="15.0">
          <children>
             <TextField fx:id="textInputUsername" promptText="Username" />
             <PasswordField fx:id="textInputPassword" promptText="password" />

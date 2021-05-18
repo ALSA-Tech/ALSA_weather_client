@@ -1,6 +1,7 @@
 package asla_client;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -17,8 +18,9 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/primary.fxml")));
         stage.setTitle("ASLA-Tech Weather App");
-        stage.setScene(new Scene(root, 1024, 720));
+        stage.setScene(new Scene(root, 800, 600));
         stage.setResizable(false);
+        stage.setOnCloseRequest(e -> Platform.exit());
         stage.show();
     }
 
