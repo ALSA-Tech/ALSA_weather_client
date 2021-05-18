@@ -1,23 +1,19 @@
 package asla_client.controller;
 
-import asla_client.logic_controllers.HTTPController;
-import asla_client.logic_controllers.InputController;
-import asla_client.logic_controllers.ScorpioZHash;
-import asla_client.logic_controllers.StringResource;
+import asla_client.AppConstants;
+import asla_client.utils.*;
 import asla_client.models.Client;
 import com.google.gson.Gson;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -29,13 +25,11 @@ public class RegistrationController implements Initializable {
     @FXML
     private TextField textInputUsername, textInputEmail;
     @FXML
-    private PasswordField textInputPassword,textInputPasswordCtrl;
+    private PasswordField textInputPassword, textInputPasswordCtrl;
     @FXML
     private Label errorText;
 
     private final InputController inputController = new InputController();
-    private final HTTPController httpController = new HTTPController();
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -46,27 +40,35 @@ public class RegistrationController implements Initializable {
     public void createAccBtn(ActionEvent actionEvent) {
         errorText.setText("");
         ScorpioZHash scorpioZHash = new ScorpioZHash();
-        Gson gson = new Gson();
 
         String userName = textInputUsername.getText().trim();
         String email = textInputEmail.getText().trim();
         String passWord = textInputPassword.getText().trim();
         String passWordCheck = textInputPasswordCtrl.getText().trim();
 
-        if (inputController.CheckInputsIsValid(userName,email, passWord,passWordCheck)) {
+        if (inputController.CheckInputsIsValid(userName, email, passWord, passWordCheck)) {
             if (inputController.validEmail(email)) {
                 if (inputController.passwordMatch(passWord, passWordCheck)) {
                     System.out.println("Valid registration");
-                    String hassPass = scorpioZHash.generateHash(passWord);
-                    Client user = new Client(null,userName,hassPass,email,null);
-                    String json = gson.toJson(user);
-                    System.out.println(json);
-                    httpController.postRequest(json);
+                    String hashPass = scorpioZHash.generateHash(passWord);
+                    Client user = new Client(-1, userName, hashPass, email);
+                    sendregistrationRequest(user);
 
+                    /*
+                    RSACryptoClient cryptoClient = new RSACryptoClient();
+                    String encrypted = cryptoClient.encrypt(AppConstants.getInstance().getServerPublicKey(), data);
+                    ClientRequest request = new ClientRequest(encrypted);
+                    String json = "{" + MessageFormat.format("\"data\": \"{0}\"", request.getData()) + "}";
+
+                    System.out.println(json);
+
+
+                    System.out.println(AppConstants.getInstance().getHttpController().postRequest(data,""));
+   */
                 } else {
                     errorText.setText("Password don't Match!");
                 }
-            }else {
+            } else {
                 errorText.setText("Email is not a valid email");
             }
         } else {
@@ -74,20 +76,27 @@ public class RegistrationController implements Initializable {
         }
     }
 
+
     public void cancelBtn(ActionEvent actionEvent) {
-     //   loadScene("login_pane.fxml");
 
-        String json = new StringBuilder()
-                .append("{")
-                .append(MessageFormat.format("\"name\": \"{0}\",", "James Bond"))
-                .append(MessageFormat.format("\"password\": \"{0}\",", "65536:D4+giM6wPFKyrVNArKU8Jw==:UA23HI6zsXxcPwXB1ZoNy0s7TZaVYBpu5O4ttdgRM3+M4yHWhWxwIb90sYxuFsx8RorcyFwm3JJtl2PNt64Urg=="))
-                .append(MessageFormat.format("\"locationSubscriptions\": {0}", "[\"eslöv\",\"malmö\"]"))
-                .append("}")
-                .toString();
+        loadScene("login_pane.fxml");
+    }
 
-        System.out.println(json);
+    private void sendregistrationRequest(Client user) {
+        new Thread(() -> {
+            // DO a request here
+            String lol = AppConstants.getInstance().getHttpController().postRequest(user, "register");
+            Client client = new Gson().fromJson(lol, Client.class);
+            ;
+            if (client != null) {
+                //Update GUI thread:
+                Platform.runLater(() -> {
+                    loadScene("login_pane.fxml");
+                });
 
-        httpController.postRequest(json);
+            }
+
+        }).start();
     }
 
 

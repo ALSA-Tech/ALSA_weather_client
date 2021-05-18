@@ -1,6 +1,5 @@
-package asla_client.logic_controllers;
+package asla_client.utils;
 
-import asla_client.models.JsonTestClass;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -22,8 +21,9 @@ public class HTTPController {
     }
 
     //TODO split up, prepare real,Routes
-    public String sendGet(String numberOne, String numberTwo){
-        String uri = String.format("https://seb-noren-cloud.herokuapp.com/calc?operation=add&numberone=%s&numbertwo=%s", numberOne, numberTwo);
+    public String sendGet(String path){
+        String uri = StringResource.SERVER_API + path;
+        System.out.println(uri);
         HttpResponse<String> response = null;
         try {
             HttpRequest request = buildGet(uri);
@@ -31,14 +31,14 @@ public class HTTPController {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        printResponse(response);
+      //  printResponse(response);
 
         return response.body();
     }
 
     // EXAMPEL OF JSON PARSING Method
     public String sendGetJSON(){
-        String uri = "https://jsonplaceholder.typicode.com/todos/1";
+        String uri = "http://localhost:8086/api/clients/search-location/test";
         HttpResponse<String> response = null;
         try {
             HttpRequest request = buildGet(uri);
@@ -70,10 +70,9 @@ public class HTTPController {
     }
 
 
-    public String postRequest(String stringJSON){
-        String uri = "http://localhost:8080/api/client";
+    public String postRequest(String stringJSON, String path){
+        String uri = StringResource.SERVER_API + path;
         HttpResponse<String> response = null;
-
         try {
             HttpRequest request = buildPostJSON(stringJSON, uri);
             response = client.send(request, BodyHandlers.ofString());
@@ -86,11 +85,10 @@ public class HTTPController {
         return response.body();
     }
 
-    public String postRequest(Object data){
-        String uri = "https://seb-noren-cloud.herokuapp.com/getWordLengthFrequency";
+    public String postRequest(Object data,String path){
+        String uri = StringResource.SERVER_API + path;
         HttpResponse<String> response = null;
         String stringJSON = gson.toJson(data);
-        System.out.println("json string: " + stringJSON);
 
         try {
             HttpRequest request = buildPostJSON(stringJSON, uri);
