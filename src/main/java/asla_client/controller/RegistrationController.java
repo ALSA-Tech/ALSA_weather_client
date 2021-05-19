@@ -39,7 +39,6 @@ public class RegistrationController implements Initializable {
 
     public void createAccBtn(ActionEvent actionEvent) {
         errorText.setText("");
-        ScorpioZHash scorpioZHash = new ScorpioZHash();
 
         String userName = textInputUsername.getText().trim();
         String email = textInputEmail.getText().trim();
@@ -49,10 +48,8 @@ public class RegistrationController implements Initializable {
         if (inputController.CheckInputsIsValid(userName, email, passWord, passWordCheck)) {
             if (inputController.validEmail(email)) {
                 if (inputController.passwordMatch(passWord, passWordCheck)) {
-                    System.out.println("Valid registration");
-                    String hashPass = scorpioZHash.generateHash(passWord);
-                    Client user = new Client(-1, userName, hashPass, email);
-                    sendregistrationRequest(user);
+                    Client user = new Client(-1, userName, passWord, email);
+                    sendRegistrationRequest(user);
 
                     /*
                     RSACryptoClient cryptoClient = new RSACryptoClient();
@@ -82,12 +79,11 @@ public class RegistrationController implements Initializable {
         loadScene("login_pane.fxml");
     }
 
-    private void sendregistrationRequest(Client user) {
+    private void sendRegistrationRequest(Client user) {
         new Thread(() -> {
             // DO a request here
             String lol = AppConstants.getInstance().getHttpController().postRequest(user, "register");
             Client client = new Gson().fromJson(lol, Client.class);
-            ;
             if (client != null) {
                 //Update GUI thread:
                 Platform.runLater(() -> {

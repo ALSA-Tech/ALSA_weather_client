@@ -25,5 +25,6 @@
             </HBox>
          </children>
       </VBox>
+      <Button layoutX="666.0" layoutY="513.0" mnemonicParsing="false" onAction="#offlineBtn" text="Offline Mode" />
    </children>
 </Pane>

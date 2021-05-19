@@ -6,26 +6,22 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane fx:id="mainContent" prefHeight="552.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.UserController">
+<Pane fx:id="mainContent" prefHeight="552.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.OfflineController">
    <children>
       <VBox alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="96.0" prefWidth="397.0" spacing="15.0">
          <children>
             <HBox prefHeight="41.0" prefWidth="397.0">
                <children>
-                  <TextField fx:id="textInput" promptText="Search city" />
-                  <Region prefHeight="56.0" prefWidth="42.0" />
                   <ChoiceBox fx:id="dropDownBox" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox prefHeight="25.0" prefWidth="229.0" spacing="5.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button mnemonicParsing="false" onAction="#request" prefWidth="100.0" text="Search" />
+                  <Button mnemonicParsing="false" onAction="#goLogin" prefWidth="100.0" text="Go Back" />
                </children>
                <VBox.margin>
                   <Insets left="5.0" />
@@ -33,14 +29,13 @@
             </HBox>
          </children>
       </VBox>
-      <LineChart fx:id="lineGraph" layoutX="20.0" layoutY="110.0" prefHeight="420.0" prefWidth="710.0" title="Weather forecast">
+      <LineChart fx:id="lineGraph" layoutX="13.0" layoutY="110.0" prefHeight="420.0" prefWidth="710.0" title="Weather forecast">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
         <yAxis>
-          <NumberAxis fx:id="yAxis" autoRanging="false" forceZeroInRange="false" lowerBound="-10.0" side="LEFT" upperBound="30.0" />
+          <NumberAxis side="LEFT" />
         </yAxis>
       </LineChart>
-      <Button layoutX="701.0" layoutY="14.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
    </children>
 </Pane>

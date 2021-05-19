@@ -2,9 +2,7 @@ package asla_client.controller;
 
 import asla_client.AppConstants;
 import asla_client.models.Client;
-import asla_client.utils.HTTPController;
 import asla_client.utils.InputController;
-import asla_client.utils.ScorpioZHash;
 import asla_client.utils.StringResource;
 import com.google.gson.Gson;
 import javafx.application.Platform;
@@ -15,6 +13,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
@@ -38,9 +37,12 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        textInputPassword.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                login();
+            }
+        });
     }
-
 
     public void login() {
 
@@ -49,7 +51,6 @@ public class LoginController implements Initializable {
 
         if (inputController.CheckInputsIsValid(userName, passWord)) {
             sendLoginRequest(userName, passWord);
-
         } else {
             System.out.println("Input missing");
         }
@@ -57,24 +58,23 @@ public class LoginController implements Initializable {
     }
 
     private void sendLoginRequest(String userName, String password) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        new Thread(() -> {
+            clearTextFields();
+
+            if (AppConstants.getInstance().isServerCon()) {
                 // DO a request here
                 Client loginClient = new Client(-1, userName, password, null);
                 String lol = AppConstants.getInstance().getHttpController().postRequest(loginClient, "login");
-                Client client = new Gson().fromJson(lol, Client.class);;
-
+                Client client = new Gson().fromJson(lol, Client.class);
                 if (client != null) {
-                    System.out.println("Login");
-                    //Update GUI thread:
+                    AppConstants.getInstance().setLoggedInClient(client);
+                    AppConstants.getInstance().setOfflineMODE(false);
                     Platform.runLater(() -> {
-                        //   textArea.setText(cx);
                         loadScene("user_pane.fxml");
                     });
 
                 } else {
-                    Platform.runLater(()-> {
+                    Platform.runLater(() -> {
                         Alert alert = new Alert(Alert.AlertType.NONE);
                         alert.setTitle("Failed Login");
                         alert.setContentText("Login Failed!");
@@ -82,7 +82,14 @@ public class LoginController implements Initializable {
                         alert.show();
                     });
                 }
-
+            } else {
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.NONE);
+                    alert.setTitle("Server Failure");
+                    alert.setContentText("Not Connected to Server!");
+                    alert.getButtonTypes().add(ButtonType.OK);
+                    alert.show();
+                });
             }
         }).start();
     }
@@ -102,6 +109,21 @@ public class LoginController implements Initializable {
     }
 
     public void registration() {
-        loadScene("registration_pane.fxml");
+        if (AppConstants.getInstance().isServerCon()) {
+            // DO a request here
+            loadScene("registration_pane.fxml");
+        } else {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setTitle("Server Failure");
+                alert.setContentText("Not Connected to Server!");
+                alert.getButtonTypes().add(ButtonType.OK);
+                alert.show();
+            });
+        }
+    }
+
+    public void offlineBtn() {
+        loadScene("offline_user_pane.fxml");
     }
 }
