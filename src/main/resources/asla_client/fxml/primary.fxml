@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="mainContent" prefHeight="600.0" prefWidth="800.0" stylesheets="@../basicStyleSheet.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.PrimaryController">
    <top>
@@ -16,14 +18,10 @@
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Close" onAction="#closeApp" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeApp" text="Close" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Delete" />
-               </items>
-            </Menu>
+            <Menu mnemonicParsing="false" text="Edit" />
             <Menu mnemonicParsing="false" text="Help">
                <items>
                   <MenuItem mnemonicParsing="false" text="About" />
@@ -36,23 +34,32 @@
       <Insets bottom="5.0" />
    </padding>
    <right>
-      <Region prefHeight="690.0" prefWidth="15.0" style="-fx-background-color: #73bcff;" BorderPane.alignment="CENTER" />
+      <Region prefHeight="690.0" prefWidth="15.0" BorderPane.alignment="CENTER" />
    </right>
    <left>
-      <Region prefHeight="676.0" prefWidth="18.0" style="-fx-background-color: #73bcff;" BorderPane.alignment="CENTER" />
+      <Region prefHeight="676.0" prefWidth="18.0" BorderPane.alignment="CENTER" />
    </left>
    <bottom>
       <HBox prefHeight="7.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <children>
-            <Region prefHeight="17.0" prefWidth="40.0" HBox.hgrow="ALWAYS" />
-            <Label prefHeight="17.0" prefWidth="191.0" text="System Language: English" />
-            <Region prefHeight="17.0" prefWidth="551.0" style="-fx-background-color: #73bcff;" />
-            <Label prefHeight="17.0" prefWidth="212.0" text="Copyright © 2019, ALSA-Tech Systems" />
-            <Region prefHeight="17.0" prefWidth="40.0" HBox.hgrow="NEVER" />
+            <HBox alignment="CENTER" prefHeight="22.0" prefWidth="1093.0" spacing="10.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="213.0" text="System Language: English" />
+                  <Region nodeOrientation="LEFT_TO_RIGHT" prefHeight="22.0" prefWidth="70.0" />
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="270.0" text="Copyright © 2021, ALSA-Tech Systems" />
+                  <Region nodeOrientation="RIGHT_TO_LEFT" prefHeight="22.0" prefWidth="109.0" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Server Connection: " />
+                  <Circle fx:id="connection" fill="#bdbdbd" radius="11.0" stroke="BLACK" strokeType="INSIDE" HBox.hgrow="ALWAYS" />
+                  <Region prefHeight="22.0" prefWidth="52.0" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
          </children>
       </HBox>
    </bottom>
    <center>
-      <Pane prefHeight="552.0" prefWidth="766.0" BorderPane.alignment="CENTER" />
+      <Pane minHeight="552.0" minWidth="766.0" prefHeight="552.0" prefWidth="766.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

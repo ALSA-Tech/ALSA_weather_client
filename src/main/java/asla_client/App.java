@@ -20,10 +20,12 @@ public class App extends Application {
         stage.setTitle("ASLA-Tech Weather App");
         stage.setScene(new Scene(root, 800, 600));
         stage.setResizable(false);
-        stage.setOnCloseRequest(e -> Platform.exit());
+        stage.setOnCloseRequest(e -> {
+            AppConstants.getInstance().setPingFlag(false);
+            Platform.exit();
+        });
         stage.show();
     }
-
 
 
     public static void main(String[] args) {
@@ -31,7 +33,6 @@ public class App extends Application {
 
 
     }
-
 
 
 }

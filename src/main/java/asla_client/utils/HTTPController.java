@@ -29,11 +29,27 @@ public class HTTPController {
             HttpRequest request = buildGet(uri);
             response = client.send(request, BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
       //  printResponse(response);
 
         return response.body();
+    }
+
+    public Integer checkCon(String path){
+        String uri = StringResource.SERVER_API + path;
+        HttpResponse<String> response = null;
+        try {
+            HttpRequest request = buildGet(uri);
+            response = client.send(request, BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            System.err.println( e.getMessage());
+            return null;
+
+        }
+        //  printResponse(response);
+
+        return response.statusCode();
     }
 
     // EXAMPEL OF JSON PARSING Method
@@ -44,7 +60,7 @@ public class HTTPController {
             HttpRequest request = buildGet(uri);
             response = client.send(request, BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());;
         }
 
         printResponse(response);
@@ -61,7 +77,7 @@ public class HTTPController {
             response = client.send(request, BodyHandlers.ofString());
             jsonTestClass = gson.fromJson(response.body(), componentType);
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
         printResponse(response);
@@ -77,7 +93,7 @@ public class HTTPController {
             HttpRequest request = buildPostJSON(stringJSON, uri);
             response = client.send(request, BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
         printResponse(response);
@@ -94,7 +110,7 @@ public class HTTPController {
             HttpRequest request = buildPostJSON(stringJSON, uri);
             response = client.send(request, BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
 
         printResponse(response);

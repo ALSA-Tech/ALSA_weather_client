@@ -1,33 +1,30 @@
 package asla_client.controller;
 
 
+import asla_client.App;
 import asla_client.AppConstants;
 
 import asla_client.utils.RSACryptoClient;
 import asla_client.utils.StringResource;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.text.MessageFormat;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class PrimaryController implements Initializable {
 
-
+    @FXML
+    private Circle connection;
     @FXML
     private BorderPane mainContent;
 
@@ -35,17 +32,16 @@ public class PrimaryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         AppConstants.getInstance();
-        System.out.println("Primary Control active");
+        checkConn();
 
         RSACryptoClient cryptoClient = new RSACryptoClient();
-      //  String serverKey = AppConstants.getInstance().getHttpController().sendGet("search-location/location");
-     //   System.out.println(serverKey);
+        //  String serverKey = AppConstants.getInstance().getHttpController().sendGet("search-location/location");
+        //   System.out.println(serverKey);
         /*
         AppConstants.getInstance().setServerPublicKey(cryptoClient.publicKeyFromString(serverKey));
 
          */
         loadScene("login_pane.fxml");
-
 
 
 /*
@@ -59,16 +55,6 @@ public class PrimaryController implements Initializable {
 
     }
 
-    private String encodeValue(String value) {
-        try {
-            return URLEncoder.encode(value, StandardCharsets.UTF_8.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-
     private void loadScene(String fxml) {
         try {
             Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(StringResource.ROOT_VIEW + fxml)));
@@ -78,7 +64,39 @@ public class PrimaryController implements Initializable {
         }
     }
 
-    public void closeApp(ActionEvent actionEvent) {
+    public void checkConn() {
+        new Thread(() -> {
+            // DO a request here
+            while (AppConstants.getInstance().isPingFlag()) {
+                try {
+                    Integer con = AppConstants.getInstance().getHttpController().checkCon("connection");
+                    if (con == null) {
+                        connection.setFill(Color.RED);
+                        System.out.println("No Connection!");
+                        if (!AppConstants.getInstance().isOfflineMODE()) {
+                            AppConstants.getInstance().setServerCon(false);
+                            AppConstants.getInstance().setOfflineMODE(true);
+                            AppConstants.getInstance().setLoggedInClient(null);
+                            Platform.runLater(() -> {
+                                loadScene("login_pane.fxml");
+
+                            });
+                        }
+                    } else {
+                        AppConstants.getInstance().setServerCon(true);
+                        connection.setFill(Color.GREEN);
+                    }
+                    Thread.sleep(3000);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+
+            }
+        }).start();
+    }
+
+    public void closeApp() {
+        AppConstants.getInstance().setPingFlag(false);
         Platform.exit();
     }
 }
