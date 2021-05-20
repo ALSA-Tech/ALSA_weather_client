@@ -1,9 +1,14 @@
 package asla_client;
 
 import asla_client.models.Client;
+import asla_client.models.Location;
 import asla_client.utils.HTTPController;
+import asla_client.utils.StringResource;
+import asla_client.utils.WriteReadFiles;
 
+import java.io.File;
 import java.security.PublicKey;
+import java.util.ArrayList;
 
 public class AppConstants {
 
@@ -15,6 +20,8 @@ public class AppConstants {
     private PublicKey serverPublicKey;
     private Client loggedInClient;
     private final HTTPController httpController;
+    private ArrayList<Location> locations;
+    private final WriteReadFiles writeReadFiles;
 
     public static AppConstants getInstance() {
         if (instance == null) {
@@ -26,6 +33,8 @@ public class AppConstants {
     public AppConstants() {
         System.out.println("AppConstant Runs");
         httpController = new HTTPController();
+        locations = new ArrayList<>();
+        writeReadFiles = new WriteReadFiles();
         loggedInClient = null;
     }
 
@@ -71,6 +80,13 @@ public class AppConstants {
 
     public void setServerCon(boolean serverCon) {
         this.serverCon = serverCon;
+    }
+
+
+    public void saveToCache(Location location){
+        locations.add(location);
+        writeReadFiles.writeObjectFile(locations, new File(StringResource.FILE_CACHE));
+
     }
 }
 
