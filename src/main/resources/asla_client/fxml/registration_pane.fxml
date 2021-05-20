@@ -14,7 +14,7 @@
    <children>
       <VBox layoutX="275.0" layoutY="161.0" prefHeight="96.0" prefWidth="217.0" spacing="15.0">
          <children>
-            <TextField fx:id="textInputUsername" promptText="Username" />
+            <TextField fx:id="textInputUsername" promptText="Name" />
             <TextField fx:id="textInputEmail" layoutX="15.0" layoutY="15.0" promptText="Email" />
             <PasswordField fx:id="textInputPassword" promptText="Password" />
             <PasswordField fx:id="textInputPasswordCtrl" promptText="Verify password" />

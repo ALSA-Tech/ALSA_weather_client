@@ -21,7 +21,7 @@ public class HTTPController {
     }
 
     //TODO split up, prepare real,Routes
-    public String sendGet(String path){
+    public String sendGet(String path) {
         String uri = StringResource.SERVER_API + path;
         System.out.println(uri);
         HttpResponse<String> response = null;
@@ -31,44 +31,27 @@ public class HTTPController {
         } catch (IOException | InterruptedException e) {
             System.err.println(e.getMessage());
         }
-      //  printResponse(response);
-
-        return response.body();
+        if (response.statusCode() == 200) {
+            return response.body();
+        }
+        return null;
     }
 
-    public Integer checkCon(String path){
+    public Integer checkCon(String path) {
         String uri = StringResource.SERVER_API + path;
         HttpResponse<String> response = null;
         try {
             HttpRequest request = buildGet(uri);
             response = client.send(request, BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
-            System.err.println( e.getMessage());
+            System.err.println(e.getMessage());
             return null;
 
         }
-        //  printResponse(response);
-
         return response.statusCode();
     }
 
-    // EXAMPEL OF JSON PARSING Method
-    public String sendGetJSON(){
-        String uri = "http://localhost:8086/api/clients/search-location/test";
-        HttpResponse<String> response = null;
-        try {
-            HttpRequest request = buildGet(uri);
-            response = client.send(request, BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            System.err.println(e.getMessage());;
-        }
-
-        printResponse(response);
-
-        return response.body();
-    }
-
-    public <T> T sendGetJSONParse(Class<T> componentType){
+    public <T> T sendGetJSONParse(Class<T> componentType) {
         String uri = "https://jsonplaceholder.typicode.com/todos/1";
         T jsonTestClass = null;
         HttpResponse<String> response = null;
@@ -86,7 +69,7 @@ public class HTTPController {
     }
 
 
-    public String postRequest(String stringJSON, String path){
+    public String postRequest(String stringJSON, String path) {
         String uri = StringResource.SERVER_API + path;
         HttpResponse<String> response = null;
         try {
@@ -95,13 +78,13 @@ public class HTTPController {
         } catch (IOException | InterruptedException e) {
             System.err.println(e.getMessage());
         }
-
-        printResponse(response);
-
-        return response.body();
+        if (response.statusCode() == 200) {
+            return response.body();
+        }
+        return null;
     }
 
-    public String postRequest(Object data,String path){
+    public String postRequest(Object data, String path) {
         String uri = StringResource.SERVER_API + path;
         HttpResponse<String> response = null;
         String stringJSON = gson.toJson(data);
@@ -112,14 +95,14 @@ public class HTTPController {
         } catch (IOException | InterruptedException e) {
             System.err.println(e.getMessage());
         }
-
-        printResponse(response);
-
-        return response.body();
+        if (response.statusCode() == 200) {
+            return response.body();
+        }
+        return null;
     }
 
 
-    private HttpRequest buildPostJSON(String stringJSON, String uri){
+    private HttpRequest buildPostJSON(String stringJSON, String uri) {
         return HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(stringJSON))
                 .uri(URI.create(uri))
@@ -129,7 +112,7 @@ public class HTTPController {
                 .build();
     }
 
-    private HttpRequest buildGet(String uri){
+    private HttpRequest buildGet(String uri) {
         return HttpRequest.newBuilder()
                 .GET()
                 .uri(URI.create(uri))
@@ -138,8 +121,8 @@ public class HTTPController {
                 .build();
     }
 
-    private void printResponse(HttpResponse<String> response){
-        if (response !=null) {
+    private void printResponse(HttpResponse<String> response) {
+        if (response != null) {
             // print status code, headers, body
             System.out.println(response.statusCode());
             System.out.println(response.headers().map());

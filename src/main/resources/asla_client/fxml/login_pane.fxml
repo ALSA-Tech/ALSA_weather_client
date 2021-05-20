@@ -12,7 +12,7 @@
    <children>
       <VBox alignment="CENTER" layoutX="273.0" layoutY="222.0" prefHeight="96.0" prefWidth="220.0" spacing="15.0">
          <children>
-            <TextField fx:id="textInputUsername" promptText="Username" />
+            <TextField fx:id="textInputUsername" promptText="Email" />
             <PasswordField fx:id="textInputPassword" promptText="password" />
             <HBox prefHeight="25.0" prefWidth="229.0" spacing="5.0" VBox.vgrow="ALWAYS">
                <children>
