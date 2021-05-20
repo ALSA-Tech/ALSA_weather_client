@@ -19,6 +19,7 @@ import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -43,7 +44,9 @@ import java.util.ResourceBundle;
 public class UserController implements Initializable {
 
     @FXML
-    private NumberAxis yAxis;
+    private Label user;
+    @FXML
+    private Button trackBtn;
     @FXML
     private Pane mainContent;
     @FXML
@@ -53,18 +56,21 @@ public class UserController implements Initializable {
     @FXML
     private TextField textInput;
 
+    private volatile boolean removeLocation = false;
+
     private final InputController inputController = new InputController();
     private final WriteReadFiles writeReadFiles = new WriteReadFiles();
+    private String currentLocation = "";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        user.setText("User: " + AppConstants.getInstance().getLoggedInClient().getName().toUpperCase());
         lineGraph.getXAxis().setLabel("Date");
         lineGraph.getYAxis().setLabel("Celsius (°C)");
         lineGraph.setAnimated(false);
+        trackBtn.setDisable(true);
 
-        ArrayList<Location> locations = new ArrayList<>();
-
-        getLocationsRequest(AppConstants.getInstance().getLoggedInClient().getId());
+        //     getLocationsRequest(AppConstants.getInstance().getLoggedInClient().getId());
 
 /*
         XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -84,41 +90,31 @@ public class UserController implements Initializable {
 
         locations.add(loc);
 
-
-
-
         writeReadFiles.writeObjectFile(locations, new File("offlineCache.bin"));
 
  */
 
-
         //Setting the data to Line chart
-     //   lineGraph.getData().add(getSeries());
+        //   lineGraph.getData().add(getSeries());
 
 
-        for (Location location : locations) {
-            dropDownBox.getItems().add(location.getLocation());
-        }
-        dropDownBox.getSelectionModel().selectFirst();
-        int index = dropDownBox.getSelectionModel().getSelectedIndex();
-
-
-
-        dropDownBox.getItems().add("Malmö");
-        dropDownBox.getSelectionModel().selectFirst();
-        dropDownBox.getItems().add("Kristianstad");
-        dropDownBox.getItems().add("Lund");
+        fillBox();
 
         dropDownBox.setOnAction((event) -> {
             textInput.clear();
-            int selectedIndex = dropDownBox.getSelectionModel().getSelectedIndex();
-            System.out.println("ChoiceBox.getValue(): " + dropDownBox.getValue());
-            sendLocationRequest(dropDownBox.getValue());
+            trackBtn.setDisable(false);
+            removeLocation = true;
+            String value = dropDownBox.getSelectionModel().getSelectedItem();
+            if (value != null) {
+                trackBtn.setText("Remove Tracking");
+                sendLocationRequest(value);
+            }
         });
 
 
         textInput.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
+                dropDownBox.getSelectionModel().clearSelection();
                 request();
             }
         });
@@ -128,18 +124,18 @@ public class UserController implements Initializable {
         String input = textInput.getText().trim();
         if (inputController.CheckInputsIsValid(input)) {
             textInput.clear();
+            trackBtn.setText("Track Location");
+            removeLocation = false;
             sendLocationRequest(input);
         }
-
     }
 
     private void sendLocationRequest(String input) {
+        currentLocation = input;
         new Thread(() -> {
-            // DO a request here
             String uri = String.format("search-location/%s", encodeValue(input));
             String jsonData = AppConstants.getInstance().getHttpController().sendGet(uri);
             Location location = new Gson().fromJson(jsonData, Location.class);
-
             if (location != null) {
                 //Update GUI thread:
                 Platform.runLater(() -> {
@@ -147,6 +143,7 @@ public class UserController implements Initializable {
                     //Setting the data to Line chart
                     lineGraph.setTitle("Weather forecast for " + location.getLocation());
                     lineGraph.getData().add(getSeries(location));
+                    trackBtn.setDisable(false);
                 });
 
             }
@@ -160,8 +157,8 @@ public class UserController implements Initializable {
             System.out.println(uri);
             String jsonData = AppConstants.getInstance().getHttpController().sendGet(uri);
             System.out.println(jsonData);
-        //    ArrayList<Location> locations = new Gson().fromJson(jsonData, new TypeToken<List<Location>>(){}.getType());
-         //   System.out.println(locations.toString());
+            //    ArrayList<Location> locations = new Gson().fromJson(jsonData, new TypeToken<List<Location>>(){}.getType());
+            //   System.out.println(locations.toString());
             /*
             if (location != null) {
                 //Update GUI thread:
@@ -179,7 +176,55 @@ public class UserController implements Initializable {
         }).start();
     }
 
-    private XYChart.Series<String, Double> getSeries(Location location){
+    public void logOut() {
+        sendLogOutRequest();
+    }
+
+    private void sendLogOutRequest() {
+        new Thread(() -> {
+            Client loginClient = new Client(-1, "userName", "password", null, null);
+            String jsonData = AppConstants.getInstance().getHttpController().postRequest(loginClient, "logout");
+            Client client = new Gson().fromJson(jsonData, Client.class);
+            if (client == null) {
+                AppConstants.getInstance().setLoggedInClient(null);
+                Platform.runLater(() -> {
+                    loadScene("login_pane.fxml");
+                });
+            }
+        }).start();
+    }
+
+    public void trackLocationBtn() {
+        System.out.println(currentLocation);
+        new Thread(() -> {
+            Client loginClient = AppConstants.getInstance().getLoggedInClient();
+            if (removeLocation) {
+                if (loginClient.getLocationSubscriptions().contains(currentLocation)) {
+                    loginClient.getLocationSubscriptions().remove(currentLocation);
+                    removeLocation = false;
+                    Platform.runLater(() -> {
+                        trackBtn.setText("Track Location");
+                    });
+                }
+            } else {
+                loginClient.getLocationSubscriptions().add(currentLocation);
+            }
+            String jsonData = AppConstants.getInstance().getHttpController().postRequest(loginClient, "update");
+            System.out.println(jsonData);
+            Client client = new Gson().fromJson(jsonData, Client.class);
+            if (client != null) {
+                AppConstants.getInstance().setLoggedInClient(client);
+            }
+            Platform.runLater(() -> {
+                fillBox();
+                trackBtn.setDisable(true);
+            });
+
+        }).start();
+
+    }
+
+    private XYChart.Series<String, Double> getSeries(Location location) {
         XYChart.Series<String, Double> series = new XYChart.Series<>();
         series.setName("Temperature " + location.getLocation());
 
@@ -211,31 +256,22 @@ public class UserController implements Initializable {
         return "";
     }
 
-    public void logOut() {
-    sendLogOutRequest();
-    }
-
-    private void sendLogOutRequest() {
-        new Thread(() -> {
-            Client loginClient = new Client(-1, "userName", "password", null);
-            String lol = AppConstants.getInstance().getHttpController().postRequest(loginClient, "logout");
-            Client client = new Gson().fromJson(lol, Client.class);
-
-            if (client == null) {
-                AppConstants.getInstance().setLoggedInClient(null);
-                Platform.runLater(() -> {
-                    loadScene("login_pane.fxml");
-                });
-            }
-        }).start();
-    }
-
     private void loadScene(String fxml) {
         try {
             Pane pane = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(StringResource.ROOT_VIEW + fxml)));
             mainContent.getChildren().setAll(pane);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void fillBox() {
+        dropDownBox.getItems().clear();
+        List<String> list = AppConstants.getInstance().getLoggedInClient().getLocationSubscriptions();
+        for (String s : list) {
+            if (!s.isEmpty()) {
+                dropDownBox.getItems().add(s);
+            }
         }
     }
 }

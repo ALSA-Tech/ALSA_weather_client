@@ -37,7 +37,7 @@ public class RegistrationController implements Initializable {
 
     }
 
-    public void createAccBtn(ActionEvent actionEvent) {
+    public void createAccBtn() {
         errorText.setText("");
 
         String userName = textInputUsername.getText().trim();
@@ -48,20 +48,8 @@ public class RegistrationController implements Initializable {
         if (inputController.CheckInputsIsValid(userName, email, passWord, passWordCheck)) {
             if (inputController.validEmail(email)) {
                 if (inputController.passwordMatch(passWord, passWordCheck)) {
-                    Client user = new Client(-1, userName, passWord, email);
+                    Client user = new Client(-1, userName, passWord, email,null);
                     sendRegistrationRequest(user);
-
-                    /*
-                    RSACryptoClient cryptoClient = new RSACryptoClient();
-                    String encrypted = cryptoClient.encrypt(AppConstants.getInstance().getServerPublicKey(), data);
-                    ClientRequest request = new ClientRequest(encrypted);
-                    String json = "{" + MessageFormat.format("\"data\": \"{0}\"", request.getData()) + "}";
-
-                    System.out.println(json);
-
-
-                    System.out.println(AppConstants.getInstance().getHttpController().postRequest(data,""));
-   */
                 } else {
                     errorText.setText("Password don't Match!");
                 }

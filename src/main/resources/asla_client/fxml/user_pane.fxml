@@ -6,15 +6,17 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <Pane fx:id="mainContent" prefHeight="552.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.UserController">
    <children>
-      <VBox alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="96.0" prefWidth="397.0" spacing="15.0">
+      <VBox alignment="CENTER_LEFT" layoutX="14.0" layoutY="14.0" prefHeight="96.0" prefWidth="397.0" spacing="15.0">
          <children>
             <HBox prefHeight="41.0" prefWidth="397.0">
                <children>
@@ -23,9 +25,16 @@
                   <ChoiceBox fx:id="dropDownBox" prefWidth="150.0" />
                </children>
             </HBox>
+            <Label fx:id="user" prefHeight="24.0" prefWidth="453.0" text="USER" textFill="#6f6868" wrapText="true">
+               <font>
+                  <Font name="Bookman Old Style Bold" size="20.0" />
+               </font>
+            </Label>
             <HBox prefHeight="25.0" prefWidth="229.0" spacing="5.0" VBox.vgrow="ALWAYS">
                <children>
                   <Button mnemonicParsing="false" onAction="#request" prefWidth="100.0" text="Search" />
+                  <Region prefHeight="25.0" prefWidth="79.0" />
+                  <Button fx:id="trackBtn" mnemonicParsing="false" onAction="#trackLocationBtn" prefHeight="25.0" prefWidth="133.0" text="Track Location" />
                </children>
                <VBox.margin>
                   <Insets left="5.0" />
@@ -33,7 +42,7 @@
             </HBox>
          </children>
       </VBox>
-      <LineChart fx:id="lineGraph" layoutX="20.0" layoutY="110.0" prefHeight="420.0" prefWidth="710.0" title="Weather forecast">
+      <LineChart fx:id="lineGraph" layoutX="20.0" layoutY="121.0" prefHeight="409.0" prefWidth="710.0" title="Weather forecast">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>

@@ -63,8 +63,9 @@ public class LoginController implements Initializable {
 
             if (AppConstants.getInstance().isServerCon()) {
                 // DO a request here
-                Client loginClient = new Client(-1, userName, password, null);
+                Client loginClient = new Client(-1, null, password, userName,null);
                 String lol = AppConstants.getInstance().getHttpController().postRequest(loginClient, "login");
+                System.out.println(lol);
                 Client client = new Gson().fromJson(lol, Client.class);
                 if (client != null) {
                     AppConstants.getInstance().setLoggedInClient(client);
