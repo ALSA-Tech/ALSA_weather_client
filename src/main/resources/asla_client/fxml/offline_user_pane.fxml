@@ -10,6 +10,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <Pane fx:id="mainContent" prefHeight="552.0" prefWidth="766.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="asla_client.controller.OfflineController">
    <children>
       <VBox alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="96.0" prefWidth="397.0" spacing="15.0">
@@ -29,13 +31,18 @@
             </HBox>
          </children>
       </VBox>
-      <LineChart fx:id="lineGraph" layoutX="13.0" layoutY="110.0" prefHeight="420.0" prefWidth="710.0" title="Weather forecast">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-      </LineChart>
+       <LineChart fx:id="lineGraph" layoutX="20.0" layoutY="121.0" prefHeight="409.0" prefWidth="710.0" title="Weather forecast">
+           <xAxis>
+               <CategoryAxis side="BOTTOM" />
+           </xAxis>
+           <yAxis>
+               <NumberAxis fx:id="yAxis" autoRanging="false" forceZeroInRange="false" lowerBound="-10.0" side="LEFT" upperBound="30.0" />
+           </yAxis>
+       </LineChart>
+       <Label fx:id="dateTime" layoutX="558.0" layoutY="102.0" prefHeight="17.0" prefWidth="172.0" textAlignment="RIGHT" textFill="#6f6868">
+           <font>
+               <Font name="Bookman Old Style Bold" size="12.0" />
+           </font>
+       </Label>
    </children>
 </Pane>

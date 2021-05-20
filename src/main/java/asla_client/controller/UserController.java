@@ -44,7 +44,7 @@ import java.util.ResourceBundle;
 public class UserController implements Initializable {
 
     @FXML
-    private Label user;
+    private Label user, dateTime;
     @FXML
     private Button trackBtn;
     @FXML
@@ -70,32 +70,7 @@ public class UserController implements Initializable {
         lineGraph.setAnimated(false);
         trackBtn.setDisable(true);
 
-        //     getLocationsRequest(AppConstants.getInstance().getLoggedInClient().getId());
-
-/*
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Temperature");
-
-        ArrayList<LocationDataXY> dataSeriesXY = new ArrayList<>();
-        dataSeriesXY.add(new LocationDataXY(LocalDate.now().toString(), 18));
-        dataSeriesXY.add(new LocationDataXY(LocalDate.now().plusDays(1).toString(), 14));
-        dataSeriesXY.add(new LocationDataXY(LocalDate.now().plusDays(2).toString(), 15));
-        dataSeriesXY.add(new LocationDataXY(LocalDate.now().plusDays(3).toString(), 11));
-        dataSeriesXY.add(new LocationDataXY(LocalDate.now().plusDays(4).toString(), 9));
-        dataSeriesXY.add(new LocationDataXY(LocalDate.now().plusDays(5).toString(), 18));
-        dataSeriesXY.add(new LocationDataXY(LocalDate.now().plusDays(6).toString(), 10));
-
-
-        Location loc = new Location("Malmö", LocalDateTime.now().toString(), dataSeriesXY);
-
-        locations.add(loc);
-
-        writeReadFiles.writeObjectFile(locations, new File("offlineCache.bin"));
-
- */
-
-        //Setting the data to Line chart
-        //   lineGraph.getData().add(getSeries());
+        //    getLocationsRequest(AppConstants.getInstance().getLoggedInClient().getId());
 
 
         fillBox();
@@ -138,10 +113,13 @@ public class UserController implements Initializable {
             Location location = new Gson().fromJson(jsonData, Location.class);
             if (location != null) {
                 //Update GUI thread:
+                AppConstants.getInstance().saveToCache(location);
+                String label = location.getRequestTimeStamp().replace("T", " ").substring(0, 19);
                 Platform.runLater(() -> {
                     lineGraph.getData().clear();
                     //Setting the data to Line chart
                     lineGraph.setTitle("Weather forecast for " + location.getLocation());
+                    dateTime.setText(label);
                     lineGraph.getData().add(getSeries(location));
                     trackBtn.setDisable(false);
                 });
@@ -195,7 +173,6 @@ public class UserController implements Initializable {
     }
 
     public void trackLocationBtn() {
-        System.out.println(currentLocation);
         new Thread(() -> {
             Client loginClient = AppConstants.getInstance().getLoggedInClient();
             if (removeLocation) {
@@ -210,7 +187,6 @@ public class UserController implements Initializable {
                 loginClient.getLocationSubscriptions().add(currentLocation);
             }
             String jsonData = AppConstants.getInstance().getHttpController().postRequest(loginClient, "update");
-            System.out.println(jsonData);
             Client client = new Gson().fromJson(jsonData, Client.class);
             if (client != null) {
                 AppConstants.getInstance().setLoggedInClient(client);
@@ -227,7 +203,6 @@ public class UserController implements Initializable {
     private XYChart.Series<String, Double> getSeries(Location location) {
         XYChart.Series<String, Double> series = new XYChart.Series<>();
         series.setName("Temperature " + location.getLocation());
-
         for (int i = 0; i < location.getDataSeriesXY().size(); i++) {
             var data = new XYChart.Data<>(location.getDataSeriesXY().get(i).getLocalDate(), location.getDataSeriesXY().get(i).getTemp());
             data.setNode(createDataNode(data.YValueProperty()));

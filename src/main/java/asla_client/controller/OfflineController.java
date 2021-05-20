@@ -29,6 +29,8 @@ import java.util.ResourceBundle;
 public class OfflineController implements Initializable {
 
     @FXML
+    private Label dateTime;
+    @FXML
     private Pane mainContent;
 
     @FXML
@@ -45,7 +47,7 @@ public class OfflineController implements Initializable {
         lineGraph.setAnimated(false);
 
 
-        ArrayList<Location> locations = (ArrayList<Location>) writeReadFiles.readObjectFile(new File("offlineCache.bin"));
+        ArrayList<Location> locations = (ArrayList<Location>) writeReadFiles.readObjectFile(new File(StringResource.FILE_CACHE));
 
         for (Location location : locations) {
             dropDownBox.getItems().add(location.getLocation());
@@ -53,11 +55,15 @@ public class OfflineController implements Initializable {
         dropDownBox.getSelectionModel().selectFirst();
         int index = dropDownBox.getSelectionModel().getSelectedIndex();
         //Setting the data to Line chart
+        String label = locations.get(index).getRequestTimeStamp().replace("T", " ").substring(0, 19);
+        dateTime.setText(label);
         lineGraph.getData().add(getSeries(locations.get(index)));
 
         dropDownBox.setOnAction((event) -> {
             lineGraph.getData().clear();
             int selectedIndex = dropDownBox.getSelectionModel().getSelectedIndex();
+            String label2 = locations.get(selectedIndex).getRequestTimeStamp().replace("T", " ").substring(0, 19);
+            dateTime.setText(label2);
             lineGraph.getData().add(getSeries(locations.get(selectedIndex)));
         });
 
