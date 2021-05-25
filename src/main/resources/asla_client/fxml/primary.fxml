@@ -5,10 +5,12 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Text?>
 
@@ -40,8 +42,9 @@
       <Region prefHeight="676.0" prefWidth="18.0" BorderPane.alignment="CENTER" />
    </left>
    <bottom>
-      <HBox prefHeight="7.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="7.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <children>
+            <Separator prefWidth="200.0" />
             <HBox alignment="CENTER" prefHeight="22.0" prefWidth="1093.0" spacing="10.0">
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="213.0" text="System Language: English" />
@@ -57,7 +60,7 @@
                </opaqueInsets>
             </HBox>
          </children>
-      </HBox>
+      </VBox>
    </bottom>
    <center>
       <Pane minHeight="552.0" minWidth="766.0" prefHeight="552.0" prefWidth="766.0" BorderPane.alignment="CENTER" />

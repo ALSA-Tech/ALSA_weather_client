@@ -110,6 +110,7 @@ public class UserController implements Initializable {
         new Thread(() -> {
             String uri = String.format("search-location/%s", encodeValue(input));
             String jsonData = AppConstants.getInstance().getHttpController().sendGet(uri);
+            System.out.println(jsonData);
             Location location = new Gson().fromJson(jsonData, Location.class);
             if (location != null) {
                 //Update GUI thread:

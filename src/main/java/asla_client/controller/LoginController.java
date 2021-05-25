@@ -13,6 +13,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
@@ -31,12 +33,18 @@ public class LoginController implements Initializable {
     private TextField textInputUsername;
     @FXML
     private PasswordField textInputPassword;
+    @FXML
+    private ImageView imageView;
+
+
+
 
 
     private final InputController inputController = new InputController();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         textInputPassword.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode() == KeyCode.ENTER) {
                 login();
